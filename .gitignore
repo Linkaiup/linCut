@@ -1,0 +1,16 @@
+.env
+node_modules/
+__pycache__/
+*.pyc
+.next/
+output/
+backend/output/
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+.playwright-mcp/
+.DS_Store
+docs/plans/
+lincut-*.png

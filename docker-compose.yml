@@ -1,0 +1,9 @@
+services:
+  lincut:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./output:/app/backend/output
