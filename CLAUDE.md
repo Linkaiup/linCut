@@ -8,7 +8,8 @@ Guidance for working in the **linCut** repository.
 python -m backend.main
 pip install -r backend/requirements.txt
 python backend/smoke_test.py
-docker compose up
+docker compose up                   # requires .env with MINIMAX_API_KEY
+./start.sh                          # recommended one-click Docker launcher
 ```
 
 ffmpeg required.

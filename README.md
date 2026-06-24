@@ -56,6 +56,39 @@ python -m backend.main
 
 Open http://localhost:8000
 
+## Docker 一键运行（推荐）
+
+无需安装 Python，只需 [Docker Desktop](https://www.docker.com/products/docker-desktop/)。
+
+```bash
+git clone https://github.com/Linkaiup/linCut.git
+cd linCut
+./start.sh          # macOS / Linux
+# start.bat         # Windows
+```
+
+首次运行会自动从 `.env.example` 创建 `.env`，填入 `MINIMAX_API_KEY` 后再次执行 `./start.sh` 即可。
+
+浏览器打开 **http://localhost:8000**。生成的视频保存在 `data/workspace/` 目录。
+
+### 常用命令
+
+```bash
+docker compose logs -f    # 查看日志
+docker compose down       # 停止服务
+docker compose up -d      # 后台启动（已构建过可跳过 --build）
+```
+
+修改端口：在 `.env` 中添加 `LINCUT_PORT=9000`，然后 `docker compose up -d`。
+
+### 手动 Docker 方式
+
+```bash
+cp .env.example .env      # 编辑 MINIMAX_API_KEY
+mkdir -p data/workspace
+docker compose up --build -d
+```
+
 ## API
 
 | Method | Path | Description |

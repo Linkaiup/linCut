@@ -1,9 +1,24 @@
 services:
   lincut:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: lincut:latest
+    container_name: lincut
     ports:
-      - "8000:8000"
+      - "${LINCUT_PORT:-8000}:8000"
     env_file:
       - .env
+    environment:
+      - MINIMAX_API_KEY=${MINIMAX_API_KEY}
+      - MINIMAX_BASE_URL=${MINIMAX_BASE_URL:-}
     volumes:
-      - ./backend/workspace:/app/backend/workspace
+      # 生成的视频持久化到本地 data/workspace，便于下载
+      - ./data/workspace:/app/backend/workspace
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
