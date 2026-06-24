@@ -29,7 +29,7 @@ Assembler Agent (ffmpeg mux + captions)
 deliverable.mp4
 ```
 
-Footage, Narrator, and Composer run **in parallel** after the Writer finishes.
+Footage, Narrator, and Composer run **in parallel** after the Writer finishes. The **60s** option generates **10 clips × 6s** and stitches them into one minute.
 
 ## Agent responsibilities
 

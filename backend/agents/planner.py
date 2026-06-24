@@ -69,12 +69,24 @@ class PlannerAgent(BaseAgent):
             raw2 = llm.complete(messages)
             return self._validate(llm.parse_json_object(raw2), ctx)
 
+    def _normalize_segment_lengths(self, blueprint: dict) -> dict:
+        """Align segment durations with runtime ÷ count (60s → 10×6s)."""
+        segments = blueprint["segments"]
+        per_seg = max(1, blueprint["runtime_sec"] // len(segments))
+        for seg in segments:
+            seg["length_sec"] = per_seg
+        return blueprint
+
     def _validate(self, blueprint: dict, ctx: ProductionContext) -> dict:
         blueprint = llm.unwrap_payload(blueprint, "segments")
         segments = blueprint.get("segments")
         if not isinstance(segments, list) or not segments:
             raise ValueError("Blueprint missing non-empty 'segments' array")
+        if len(segments) != ctx.segment_count:
+            raise ValueError(
+                f"Blueprint has {len(segments)} segments, expected {ctx.segment_count}"
+            )
         blueprint.setdefault("headline", ctx.prompt[:50].strip() or "Untitled")
         blueprint.setdefault("look", "cinematic")
         blueprint.setdefault("runtime_sec", ctx.runtime)
-        return blueprint
+        return self._normalize_segment_lengths(blueprint)

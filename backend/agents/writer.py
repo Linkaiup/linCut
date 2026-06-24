@@ -41,7 +41,8 @@ class WriterAgent(BaseAgent):
         ]
 
         def _call():
-            raw = llm.complete(messages, max_tokens=3000)
+            tokens = max(3000, ctx.segment_count * 450)
+            raw = llm.complete(messages, max_tokens=tokens)
             try:
                 plan = llm.parse_json_object(raw)
             except json.JSONDecodeError:
@@ -49,7 +50,8 @@ class WriterAgent(BaseAgent):
                     {"role": "assistant", "content": raw},
                     {"role": "user", "content": "Return ONLY valid JSON, no markdown."},
                 ])
-                plan = llm.parse_json_object(llm.complete(messages, max_tokens=3000))
+                plan = llm.parse_json_object(llm.complete(messages, max_tokens=tokens))
+            plan = self._merge_blueprint_fields(plan, blueprint)
             plan["headline"] = blueprint["headline"]
             plan["look"] = blueprint["look"]
             plan["runtime_sec"] = blueprint["runtime_sec"]
@@ -63,4 +65,18 @@ class WriterAgent(BaseAgent):
             for s in plan.get("segments", [])
         ]
         self.emit("Production plan locked", 0.30, {"plan_preview": preview})
+        return plan
+
+    def _merge_blueprint_fields(self, plan: dict, blueprint: dict) -> dict:
+        plan_segs = plan.get("segments", [])
+        if len(plan_segs) != len(blueprint["segments"]):
+            raise ValueError(
+                f"Screenplay has {len(plan_segs)} segments, expected {len(blueprint['segments'])}"
+            )
+        by_seq = {s["seq"]: s for s in blueprint["segments"]}
+        for seg in plan_segs:
+            src = by_seq.get(seg.get("seq"))
+            if src:
+                seg["length_sec"] = src.get("length_sec", 6)
+                seg.setdefault("tone", src.get("tone", "neutral"))
         return plan

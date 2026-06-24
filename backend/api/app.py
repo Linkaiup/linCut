@@ -12,7 +12,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 from backend.core.settings import WORKSPACE_ROOT, bootstrap
 from backend.agents.base import AgentEvent
@@ -36,9 +36,15 @@ _projects: dict = {}
 
 class CreateProjectBody(BaseModel):
     prompt: str = Field(..., min_length=1, max_length=1000)
-    duration: int = Field(default=30, ge=18, le=30)
-    segment_count: int = Field(default=3, ge=1, le=5)
+    duration: int = Field(default=30, ge=18, le=60)
+    segment_count: int = Field(default=3, ge=1, le=10)
     with_score: bool = True
+
+    @model_validator(mode="after")
+    def check_sixty_second_plan(self):
+        if self.duration == 60 and self.segment_count != 10:
+            raise ValueError("60-second videos require segment_count=10 (10×6s clips)")
+        return self
 
 
 @app.post("/api/projects")

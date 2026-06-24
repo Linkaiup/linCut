@@ -437,9 +437,10 @@
             <label class="flex items-center gap-2 text-sm text-white/40">
               <span class="text-xs uppercase tracking-wider font-medium">Duration</span>
               <select id="duration-select" class="bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-1.5 text-white/80 text-sm focus:outline-none focus:border-brand-500/40 transition-colors cursor-pointer">
-                <option value="18-3">18s (3 shots)</option>
-                <option value="30-3" selected>30s (3 shots)</option>
-                <option value="30-5">30s (5 shots)</option>
+                <option value="18-3">18s (3 clips)</option>
+                <option value="30-3" selected>30s (3 clips)</option>
+                <option value="30-5">30s (5 clips)</option>
+                <option value="60-10">60s (10 clips × 6s)</option>
               </select>
             </label>
             <label class="flex items-center gap-2 text-sm text-white/40 cursor-pointer select-none">
@@ -709,7 +710,7 @@
           </div>
           <div class="text-center">
             <div id="summary-shots" class="text-lg font-bold text-white">-</div>
-            <div class="text-[11px] text-white/30 font-medium mt-1">Segments</div>
+            <div class="text-[11px] text-white/30 font-medium mt-1">Clips</div>
           </div>
           <div class="text-center">
             <div id="summary-agents" class="text-lg font-bold text-white">6</div>
