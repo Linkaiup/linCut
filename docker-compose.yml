@@ -6,4 +6,4 @@ services:
     env_file:
       - .env
     volumes:
-      - ./output:/app/backend/output
+      - ./backend/workspace:/app/backend/workspace

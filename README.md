@@ -4,173 +4,77 @@
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-green.svg)](https://python.org)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg)](Dockerfile)
 
-Turn a text prompt into a fully produced video. **linCut** orchestrates 6 AI agents through a structured pipeline — from creative direction to final cut.
+**linCut** turns a creative brief into a finished MP4 using six cooperating **agents**, each with its own responsibility and built-in retry logic.
 
 <p align="center">
   <em>linCut — Lin's AI Video Studio</em>
 </p>
 
-## How It Works
+## Agent pipeline
 
 ```
-User Prompt
-    |
-    v
-[Director Agent] -- Analyzes creative vision, plans shots
-    |
-    v
-[Script Agent] -- Writes production script with video prompts, narration, subtitles
-    |
-    +------------------+------------------+
-    |                  |                  |
-    v                  v                  v
-[Visual Agent]    [Voice Agent]     [Music Agent]
- Hailuo Video      Speech TTS        Music Gen
-    |                  |                  |
-    +------------------+------------------+
-    |
-    v
-[Editor Agent] -- ffmpeg: concat, mix audio, burn subtitles
-    |
-    v
-Final MP4
+Brief (text)
+    │
+    ▼
+Planner Agent ──► Writer Agent
+    │
+    ├── Footage Agent   (Hailuo clips, per-segment retry)
+    ├── Narrator Agent  (TTS)
+    └── Composer Agent  (optional score, soft-fail)
+    │
+    ▼
+Assembler Agent (ffmpeg mux + captions)
+    │
+    ▼
+deliverable.mp4
 ```
 
-Visual, Voice, and Music agents run **in parallel** after the Script is ready. The Editor waits for all three, then composites the final video.
+Footage, Narrator, and Composer run **in parallel** after the Writer finishes.
 
-<p align="center">
-  <img src="docs/images/pipeline.png" width="80%" alt="Pipeline Running" />
-</p>
+## Agent responsibilities
 
-## Features
+| Agent | Role | Retry |
+|-------|------|-------|
+| **Planner** | Brief → blueprint JSON | 2× on LLM / parse errors |
+| **Writer** | Blueprint → render specs | 2× on LLM / parse errors |
+| **Footage** | Hailuo clip per segment | 2× per clip + parallel pool |
+| **Narrator** | TTS voiceover per segment | 2× per track |
+| **Composer** | Background score | 2×, optional — skips on failure |
+| **Assembler** | ffmpeg mux + captions | 1× |
 
-- **Multi-agent SOP** -- 6 specialized agents, each with a single responsibility, orchestrated in a production pipeline
-- **Parallel execution** -- Video, voice, and music generation run concurrently to minimize total wait time
-- **Real-time progress** -- SSE streaming shows every agent's status with completed/active/pending card states and elapsed timer
-- **One prompt, full video** -- From text description to a complete MP4 with narration, subtitles, and background music
-- **~$0.50 per video** -- Typical cost for a 3-shot video using MiniMax APIs
-- **Style presets** -- 5 one-click preset templates (Tech Product, Travel Vlog, Social Media Ad, Explainer, Brand Story)
-- **Script preview** -- Collapsible preview of the production script after the Script agent completes
-- **Production summary** -- Total time, shot count, agent count, and estimated cost displayed after video completion
-- **Job isolation** -- Each job gets a separate output directory, enabling safe concurrent production
-- **Auto-cleanup** -- Jobs older than 1 hour are automatically cleaned up (memory + disk)
-- **Graceful error handling** -- Per-stage error propagation with structured logging and frontend error display
+All agents inherit from `BaseAgent` (`backend/agents/base.py`) which provides `invoke()` with configurable retries and SSE progress events.
 
-## Tech Stack
-
-| Component | Technology |
-|-----------|-----------|
-| LLM | MiniMax M1 (Director + Script agents) |
-| Video | MiniMax Hailuo 2.3 (1080P, 6s clips) |
-| Voice | MiniMax Speech-2.6-HD (TTS with emotion) |
-| Music | MiniMax Music-2.0 (instrumental BGM) |
-| Composition | ffmpeg (concat, audio mix, subtitles) |
-| Backend | Python FastAPI + SSE streaming |
-| Frontend | HTML + Tailwind CSS |
-
-## Quick Start
-
-### Prerequisites
-
-- Python 3.10+
-- ffmpeg (`brew install ffmpeg` or `apt install ffmpeg`)
-- [MiniMax API key](https://www.minimax.io)
-
-### Setup
+## Quick start
 
 ```bash
 git clone https://github.com/Linkaiup/linCut.git
 cd linCut
-
 pip install -r backend/requirements.txt
-
-cp .env.example .env
-# Edit .env and add your MiniMax API key
-```
-
-### Run
-
-```bash
+cp .env.example .env   # add MINIMAX_API_KEY
 python -m backend.main
 ```
 
 Open http://localhost:8000
 
-### Docker
-
-```bash
-cp .env.example .env
-# Edit .env and add your MiniMax API key
-
-docker compose up
-```
-
-## Usage
-
-1. Enter a video description (e.g. "A sunset over Tokyo, cinematic aerial view")
-2. Choose duration and shot count
-3. Click **Start Production**
-4. Watch the 6 agents work in real-time
-5. Download the final MP4
-
 ## API
 
-| Endpoint | Method | Description |
-|---|---|---|
-| `/api/create` | POST | Start a production job |
-| `/api/stream/{job_id}` | GET | SSE event stream for progress |
-| `/api/status/{job_id}` | GET | Poll job status |
-| `/api/download/{job_id}` | GET | Download final video |
-| `/api/health` | GET | Health check |
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | `/api/projects` | Start production |
+| GET | `/api/projects/{id}` | Status |
+| GET | `/api/projects/{id}/events` | SSE agent events |
+| GET | `/api/projects/{id}/file` | Download MP4 |
 
-### Create a video
-
-```bash
-curl -X POST http://localhost:8000/api/create \
-  -H "Content-Type: application/json" \
-  -d '{"prompt": "A sunset over Tokyo", "duration": 18, "num_shots": 3}'
-```
-
-## Cost
-
-Each video generation uses MiniMax API credits:
-- **LLM calls** (Director + Script): ~$0.01
-- **Video generation** (3 shots): ~$0.30-0.60
-- **Voice TTS** (3 shots): ~$0.01
-- **Music generation**: ~$0.05
-
-Estimated total per video: **~$0.40-0.70**
-
-## Troubleshooting
-
-**ffmpeg subtitle filter not available**: If subtitles are not burned into the video, your ffmpeg build lacks `libass`. Install with `brew install ffmpeg` (macOS, usually includes it) or `apt install ffmpeg libass-dev` (Linux). linCut will still produce videos without subtitles if the filter is missing.
-
-**API key errors**: Make sure `.env` contains a valid `MINIMAX_API_KEY`. The server will refuse to start if the key is missing.
-
-**Video generation timeout**: Hailuo video generation can take 2-5 minutes per shot. The pipeline polls every 10 seconds with a 5-minute timeout per shot.
-
-**Music generation fails**: Music generation is non-blocking. If it fails, the pipeline continues and the Music card shows an amber "Skipped" state. The final video is produced without background music.
-
-**LLM returns invalid JSON**: Director and Script agents automatically retry once with an explicit "return valid JSON" instruction if the first response fails to parse.
-
-**Concurrent jobs**: Each job writes to its own `backend/output/job_{id}/` directory. Multiple simultaneous productions will not conflict.
-
-## Project Structure
+## Layout
 
 ```
 backend/
-  agents/
-    director.py   -- Creative director: prompt -> shot outline
-    script.py     -- Scriptwriter: outline -> production script
-    visual.py     -- Visual artist: script -> video clips (parallel)
-    voice.py      -- Voice artist: script -> narration audio
-    music.py      -- Composer: style+mood -> background music
-    editor.py     -- Editor: ffmpeg composition
-  pipeline.py     -- Agent orchestration (parallel execution)
-  main.py         -- FastAPI server + SSE streaming
-  config.py       -- Configuration + validation
+  agents/       base + planner, writer, footage, narrator, composer, assembler
+  core/         settings, llm helper
+  studio.py     agent orchestrator
+  api/app.py    FastAPI routes
 frontend/
-  index.html      -- Single-page app with real-time pipeline UI
+  index.html
 ```
 
 ## License

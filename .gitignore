@@ -5,6 +5,7 @@ __pycache__/
 .next/
 output/
 backend/output/
+backend/workspace/
 *.egg-info/
 dist/
 build/

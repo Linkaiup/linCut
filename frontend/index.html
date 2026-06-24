@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>linCut - AI Multi-Agent Video Studio</title>
+  <title>linCut — Prompt-to-Video Studio</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2314b8a6'/><text x='50' y='68' font-size='44' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>LC</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -264,12 +264,12 @@
     }
 
     /* Agent-specific icon colors */
-    .icon-director { background: rgba(45,212,191,0.15); color: #c084fc; border: 1px solid rgba(45,212,191,0.2); }
-    .icon-script { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.2); }
-    .icon-visual { background: rgba(34,197,94,0.15); color: #4ade80; border: 1px solid rgba(34,197,94,0.2); }
-    .icon-voice { background: rgba(234,179,8,0.15); color: #facc15; border: 1px solid rgba(234,179,8,0.2); }
-    .icon-music { background: rgba(236,72,153,0.15); color: #f472b6; border: 1px solid rgba(236,72,153,0.2); }
-    .icon-editor { background: rgba(249,115,22,0.15); color: #fb923c; border: 1px solid rgba(249,115,22,0.2); }
+    .icon-planner { background: rgba(45,212,191,0.15); color: #c084fc; border: 1px solid rgba(45,212,191,0.2); }
+    .icon-writer { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.2); }
+    .icon-footage { background: rgba(34,197,94,0.15); color: #4ade80; border: 1px solid rgba(34,197,94,0.2); }
+    .icon-narrator { background: rgba(234,179,8,0.15); color: #facc15; border: 1px solid rgba(234,179,8,0.2); }
+    .icon-composer { background: rgba(236,72,153,0.15); color: #f472b6; border: 1px solid rgba(236,72,153,0.2); }
+    .icon-assembler { background: rgba(249,115,22,0.15); color: #fb923c; border: 1px solid rgba(249,115,22,0.2); }
 
     /* ---- Log scrollbar ---- */
     #event-log::-webkit-scrollbar { width: 4px; }
@@ -416,14 +416,14 @@
       <div class="text-center mb-10">
         <div class="fade-up inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/[0.06] bg-white/[0.02] text-xs text-white/40 font-medium mb-6 tracking-wide">
           <svg class="w-3.5 h-3.5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-          6 AI Agents &middot; One Prompt &middot; linCut Pipeline
+          6 Agents &middot; One Prompt &middot; linCut Studio
         </div>
         <h2 class="fade-up fade-up-d1 text-4xl sm:text-5xl font-bold text-white mb-4 tracking-tight leading-[1.15]">
           Describe your vision.<br>
           <span class="bg-gradient-to-r from-teal-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent">linCut delivers the final cut.</span>
         </h2>
         <p class="fade-up fade-up-d2 text-white/40 text-lg max-w-xl mx-auto leading-relaxed">
-          linCut coordinates six specialized AI agents — director, script, visual, voice, music, and editor —
+          linCut coordinates six specialized agents — planner, writer, footage, narrator, composer, and assembler —
           to produce a complete MP4 from a single creative prompt.
         </p>
       </div>
@@ -443,8 +443,8 @@
               </select>
             </label>
             <label class="flex items-center gap-2 text-sm text-white/40 cursor-pointer select-none">
-              <input type="checkbox" id="music-toggle" checked class="rounded accent-brand-500">
-              <span class="text-xs uppercase tracking-wider font-medium">Music</span>
+              <input type="checkbox" id="score-toggle" checked class="rounded accent-brand-500">
+              <span class="text-xs uppercase tracking-wider font-medium">Score</span>
             </label>
           </div>
 
@@ -535,9 +535,9 @@
       </div>
     </section>
 
-    <!-- Agent Pipeline Visualization -->
-    <section id="pipeline-section" class="hidden mb-16">
-      <h3 class="section-heading text-base font-semibold text-white mb-8 tracking-tight">Agent Pipeline</h3>
+    <!-- Workflow Visualization -->
+    <section id="agent-section" class="hidden mb-16">
+      <h3 class="section-heading text-base font-semibold text-white mb-8 tracking-tight">Agent Studio</h3>
 
       <div class="pipeline-grid grid grid-cols-6 gap-4 mb-8">
         <!-- Connector lines between agents -->
@@ -551,63 +551,63 @@
           </defs>
         </svg>
 
-        <div id="stage-director" class="agent-card glass rounded-2xl p-4 pt-5 text-center opacity-30">
-          <div class="agent-icon icon-director">
+        <div id="agent-planner" class="agent-card glass rounded-2xl p-4 pt-5 text-center opacity-30">
+          <div class="agent-icon icon-planner">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M17 4v16M3 8h4M17 8h4M3 12h18M3 16h4M17 16h4M7 2l5 3 5-3"/></svg>
             <div class="completed-check">&#10003;</div><div class="failed-x">&#10005;</div><div class="skipped-dash">&#8211;</div>
           </div>
-          <div class="text-sm font-semibold text-white/90 mb-0.5">Director</div>
-          <div class="text-[11px] text-white/30 font-medium">Planning</div>
+          <div class="text-sm font-semibold text-white/90 mb-0.5">Planner</div>
+          <div class="text-[11px] text-white/30 font-medium">Briefing</div>
           <div class="stage-status text-[11px] mt-2 text-purple-400 font-medium hidden">Working...</div>
         </div>
 
-        <div id="stage-script" class="agent-card glass rounded-2xl p-4 pt-5 text-center opacity-30">
-          <div class="agent-icon icon-script">
+        <div id="agent-writer" class="agent-card glass rounded-2xl p-4 pt-5 text-center opacity-30">
+          <div class="agent-icon icon-writer">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
             <div class="completed-check">&#10003;</div><div class="failed-x">&#10005;</div><div class="skipped-dash">&#8211;</div>
           </div>
-          <div class="text-sm font-semibold text-white/90 mb-0.5">Script</div>
-          <div class="text-[11px] text-white/30 font-medium">Writing</div>
+          <div class="text-sm font-semibold text-white/90 mb-0.5">Writer</div>
+          <div class="text-[11px] text-white/30 font-medium">Screenplay</div>
           <div class="stage-status text-[11px] mt-2 text-blue-400 font-medium hidden">Working...</div>
         </div>
 
-        <div id="stage-visual" class="agent-card glass rounded-2xl p-4 pt-5 text-center opacity-30">
-          <div class="agent-icon icon-visual">
+        <div id="agent-footage" class="agent-card glass rounded-2xl p-4 pt-5 text-center opacity-30">
+          <div class="agent-icon icon-footage">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg>
             <div class="completed-check">&#10003;</div><div class="failed-x">&#10005;</div><div class="skipped-dash">&#8211;</div>
           </div>
-          <div class="text-sm font-semibold text-white/90 mb-0.5">Visual</div>
-          <div class="text-[11px] text-white/30 font-medium">Generating</div>
+          <div class="text-sm font-semibold text-white/90 mb-0.5">Footage</div>
+          <div class="text-[11px] text-white/30 font-medium">Clips</div>
           <div class="stage-status text-[11px] mt-2 text-green-400 font-medium hidden">Working...</div>
         </div>
 
-        <div id="stage-voice" class="agent-card glass rounded-2xl p-4 pt-5 text-center opacity-30">
-          <div class="agent-icon icon-voice">
+        <div id="agent-narrator" class="agent-card glass rounded-2xl p-4 pt-5 text-center opacity-30">
+          <div class="agent-icon icon-narrator">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
             <div class="completed-check">&#10003;</div><div class="failed-x">&#10005;</div><div class="skipped-dash">&#8211;</div>
           </div>
-          <div class="text-sm font-semibold text-white/90 mb-0.5">Voice</div>
-          <div class="text-[11px] text-white/30 font-medium">Recording</div>
+          <div class="text-sm font-semibold text-white/90 mb-0.5">Narrator</div>
+          <div class="text-[11px] text-white/30 font-medium">Voice</div>
           <div class="stage-status text-[11px] mt-2 text-yellow-400 font-medium hidden">Working...</div>
         </div>
 
-        <div id="stage-music" class="agent-card glass rounded-2xl p-4 pt-5 text-center opacity-30">
-          <div class="agent-icon icon-music">
+        <div id="agent-composer" class="agent-card glass rounded-2xl p-4 pt-5 text-center opacity-30">
+          <div class="agent-icon icon-composer">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
             <div class="completed-check">&#10003;</div><div class="failed-x">&#10005;</div><div class="skipped-dash">&#8211;</div>
           </div>
-          <div class="text-sm font-semibold text-white/90 mb-0.5">Music</div>
-          <div class="text-[11px] text-white/30 font-medium">Composing</div>
+          <div class="text-sm font-semibold text-white/90 mb-0.5">Composer</div>
+          <div class="text-[11px] text-white/30 font-medium">Score</div>
           <div class="stage-status text-[11px] mt-2 text-pink-400 font-medium hidden">Working...</div>
         </div>
 
-        <div id="stage-editor" class="agent-card glass rounded-2xl p-4 pt-5 text-center opacity-30">
-          <div class="agent-icon icon-editor">
+        <div id="agent-assembler" class="agent-card glass rounded-2xl p-4 pt-5 text-center opacity-30">
+          <div class="agent-icon icon-assembler">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
             <div class="completed-check">&#10003;</div><div class="failed-x">&#10005;</div><div class="skipped-dash">&#8211;</div>
           </div>
-          <div class="text-sm font-semibold text-white/90 mb-0.5">Editor</div>
-          <div class="text-[11px] text-white/30 font-medium">Compositing</div>
+          <div class="text-sm font-semibold text-white/90 mb-0.5">Assembler</div>
+          <div class="text-[11px] text-white/30 font-medium">Export</div>
           <div class="stage-status text-[11px] mt-2 text-orange-400 font-medium hidden">Working...</div>
         </div>
       </div>
@@ -657,7 +657,7 @@
             <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
           </div>
           <div class="flex-1">
-            <h4 class="text-sm font-semibold text-red-400 mb-1">Production Failed</h4>
+            <h4 class="text-sm font-semibold text-red-400 mb-1">Agent Run Failed</h4>
             <p id="error-message" class="text-xs text-white/50 mb-3"></p>
             <button onclick="retryProduction()" class="text-xs px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 transition-colors font-medium">Try Again</button>
           </div>
@@ -665,18 +665,18 @@
       </div>
 
       <!-- Script Preview (Task 2.4) -->
-      <div id="script-preview" class="hidden glass rounded-2xl p-5 mb-5">
-        <button onclick="toggleScriptPreview()" class="flex items-center gap-2 w-full text-left">
-          <svg id="script-preview-arrow" class="w-3 h-3 text-white/40 transition-transform" fill="currentColor" viewBox="0 0 12 12"><path d="M4 2l6 4-6 4V2z"/></svg>
-          <h4 class="text-xs font-semibold text-white/40 uppercase tracking-wider">Script Preview</h4>
+      <div id="plan-preview" class="hidden glass rounded-2xl p-5 mb-5">
+        <button onclick="togglePlanPreview()" class="flex items-center gap-2 w-full text-left">
+          <svg id="plan-preview-arrow" class="w-3 h-3 text-white/40 transition-transform" fill="currentColor" viewBox="0 0 12 12"><path d="M4 2l6 4-6 4V2z"/></svg>
+          <h4 class="text-xs font-semibold text-white/40 uppercase tracking-wider">Plan Preview</h4>
         </button>
-        <div id="script-preview-content" class="hidden mt-3 space-y-2">
+        <div id="plan-preview-content" class="hidden mt-3 space-y-2">
         </div>
       </div>
 
       <!-- Event Log -->
       <div class="glass rounded-2xl p-5">
-        <h4 class="text-xs font-semibold text-white/40 mb-3 uppercase tracking-wider">Production Log</h4>
+        <h4 class="text-xs font-semibold text-white/40 mb-3 uppercase tracking-wider">Agent Log</h4>
         <div id="event-log" class="space-y-1 max-h-56 overflow-y-auto text-sm font-mono">
         </div>
       </div>
@@ -701,7 +701,7 @@
 
       <!-- Production Summary (Task 3.3) -->
       <div id="production-summary" class="glass rounded-2xl p-5 mt-5">
-        <h4 class="text-xs font-semibold text-white/40 mb-4 uppercase tracking-wider">Production Summary</h4>
+        <h4 class="text-xs font-semibold text-white/40 mb-4 uppercase tracking-wider">Run Summary</h4>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div class="text-center">
             <div id="summary-time" class="text-lg font-bold text-white tabular-nums">--:--</div>
@@ -709,11 +709,11 @@
           </div>
           <div class="text-center">
             <div id="summary-shots" class="text-lg font-bold text-white">-</div>
-            <div class="text-[11px] text-white/30 font-medium mt-1">Shots</div>
+            <div class="text-[11px] text-white/30 font-medium mt-1">Segments</div>
           </div>
           <div class="text-center">
             <div id="summary-agents" class="text-lg font-bold text-white">6</div>
-            <div class="text-[11px] text-white/30 font-medium mt-1">AI Agents</div>
+            <div class="text-[11px] text-white/30 font-medium mt-1">Agents</div>
           </div>
           <div class="text-center">
             <div id="summary-cost" class="text-lg font-bold text-emerald-400">~$0.50</div>
@@ -736,7 +736,7 @@
         <div class="flex flex-col sm:flex-row items-center gap-3 sm:gap-6 text-xs text-white/20">
           <span class="flex items-center gap-1.5">
             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 2v2m8-2v2m-4-2v2M3 20h18M4 7h16a1 1 0 011 1v11H3V8a1 1 0 011-1z"/></svg>
-            linCut Multi-Agent Pipeline
+            linCut Agent Studio
           </span>
           <span class="hidden sm:block text-white/10">|</span>
           <span class="flex items-center gap-1.5">
@@ -750,37 +750,32 @@
 
   <script>
     const API_BASE = '/api';
-    let currentJobId = null;
+    let currentProjectId = null;
     let elapsedInterval = null;
-    let productionStartTime = null;
-    let activeStage = null;
-    let numShotsUsed = 3;
+    let runStartTime = null;
+    let activeAgent = null;
+    let segmentCount = 3;
 
-    // Stage ordering for marking previous stages as completed
-    const stageOrder = ['director', 'script', 'visual', 'voice', 'music', 'editor'];
-    const stageMap = {
-      director: 'stage-director',
-      script: 'stage-script',
-      visual: 'stage-visual',
-      voice: 'stage-voice',
-      music: 'stage-music',
-      editor: 'stage-editor',
+    const agentOrder = ['planner', 'writer', 'footage', 'narrator', 'composer', 'assembler'];
+    const agentMap = {
+      planner: 'agent-planner',
+      writer: 'agent-writer',
+      footage: 'agent-footage',
+      narrator: 'agent-narrator',
+      composer: 'agent-composer',
+      assembler: 'agent-assembler',
     };
 
-    function setTemplate(text) {
-      document.getElementById('prompt-input').value = text;
-    }
-
-    function setPreset(text, durationVal, music) {
+    function setPreset(text, durationVal, withScore) {
       document.getElementById('prompt-input').value = text;
       document.getElementById('duration-select').value = durationVal;
-      document.getElementById('music-toggle').checked = music;
+      document.getElementById('score-toggle').checked = withScore;
     }
 
     function setFormDisabled(disabled) {
       document.getElementById('prompt-input').disabled = disabled;
       document.getElementById('duration-select').disabled = disabled;
-      document.getElementById('music-toggle').disabled = disabled;
+      document.getElementById('score-toggle').disabled = disabled;
       document.querySelectorAll('.template-chip').forEach(c => {
         c.style.pointerEvents = disabled ? 'none' : '';
         c.style.opacity = disabled ? '0.4' : '';
@@ -788,10 +783,10 @@
     }
 
     function startElapsedTimer() {
-      productionStartTime = Date.now();
+      runStartTime = Date.now();
       const el = document.getElementById('elapsed-time');
       elapsedInterval = setInterval(() => {
-        const s = Math.floor((Date.now() - productionStartTime) / 1000);
+        const s = Math.floor((Date.now() - runStartTime) / 1000);
         const m = Math.floor(s / 60);
         const sec = s % 60;
         el.textContent = `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
@@ -806,8 +801,8 @@
     }
 
     function getElapsedFormatted() {
-      if (!productionStartTime) return '--:--';
-      const s = Math.floor((Date.now() - productionStartTime) / 1000);
+      if (!runStartTime) return '--:--';
+      const s = Math.floor((Date.now() - runStartTime) / 1000);
       const m = Math.floor(s / 60);
       const sec = s % 60;
       return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
@@ -818,41 +813,38 @@
       if (!prompt) return;
 
       const durationVal = document.getElementById('duration-select').value;
-      const [duration, shots] = durationVal.split('-').map(Number);
-      numShotsUsed = shots;
-      const includeMusic = document.getElementById('music-toggle').checked;
+      const [duration, segments] = durationVal.split('-').map(Number);
+      segmentCount = segments;
+      const withScore = document.getElementById('score-toggle').checked;
 
-      // Show pipeline, hide output and error
-      document.getElementById('pipeline-section').classList.remove('hidden');
+      document.getElementById('agent-section').classList.remove('hidden');
       document.getElementById('output-section').classList.add('hidden');
       document.getElementById('error-banner').classList.add('hidden');
-      document.getElementById('script-preview').classList.add('hidden');
+      document.getElementById('plan-preview').classList.add('hidden');
       document.getElementById('event-log').innerHTML = '';
       document.getElementById('create-btn').disabled = true;
-      document.getElementById('create-btn').textContent = 'Producing...';
+      document.getElementById('create-btn').textContent = 'Running...';
       setFormDisabled(true);
-      activeStage = null;
+      activeAgent = null;
 
-      // Reset agent cards
       document.querySelectorAll('.agent-card').forEach(c => {
         c.classList.add('opacity-30');
         c.classList.remove('glow', 'completed', 'failed', 'skipped');
         c.querySelector('.stage-status').classList.add('hidden');
       });
 
-      // Reset progress
       document.getElementById('progress-bar').style.width = '0%';
       document.getElementById('progress-pct').textContent = '0%';
-      document.getElementById('progress-label').textContent = 'Starting production...';
+      document.getElementById('progress-label').textContent = 'Agents starting...';
       document.getElementById('elapsed-time').textContent = '00:00';
 
       startElapsedTimer();
 
       try {
-        const resp = await fetch(`${API_BASE}/create`, {
+        const resp = await fetch(`${API_BASE}/projects`, {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ prompt, duration, num_shots: shots, include_music: includeMusic }),
+          body: JSON.stringify({ prompt, duration, segment_count: segments, with_score: withScore }),
         });
         if (!resp.ok) {
           const err = await resp.json().catch(() => ({ detail: resp.statusText }));
@@ -860,26 +852,26 @@
           throw new Error(msg);
         }
         const data = await resp.json();
-        currentJobId = data.job_id;
-        pollEvents(data.job_id);
+        currentProjectId = data.project_id;
+        listenEvents(data.project_id);
       } catch (err) {
         addLog('error', `Failed to start: ${err.message}`);
-        showError(`Failed to start production: ${err.message}`);
+        showError(`Failed to start agents: ${err.message}`);
         finishProduction();
       }
     }
 
-    function pollEvents(jobId) {
-      const eventSource = new EventSource(`${API_BASE}/stream/${jobId}`);
+    function listenEvents(projectId) {
+      const source = new EventSource(`${API_BASE}/projects/${projectId}/events`);
 
-      eventSource.onmessage = (event) => {
+      source.onmessage = (event) => {
         const data = JSON.parse(event.data);
-        handleEvent(data);
+        handleAgentEvent(data);
 
-        if (data.stage === 'done') {
-          eventSource.close();
-          if (data.data.status === 'completed') {
-            showOutput(jobId);
+        if (data.agent === 'closed') {
+          source.close();
+          if (data.data.status === 'done') {
+            showOutput(projectId);
           } else {
             showError(data.message);
           }
@@ -887,39 +879,39 @@
         }
       };
 
-      eventSource.onerror = () => {
-        eventSource.close();
-        setTimeout(() => pollStatus(jobId), 2000);
+      source.onerror = () => {
+        source.close();
+        setTimeout(() => pollProject(projectId), 2000);
       };
     }
 
-    async function pollStatus(jobId) {
+    async function pollProject(projectId) {
       try {
-        const resp = await fetch(`${API_BASE}/status/${jobId}`);
+        const resp = await fetch(`${API_BASE}/projects/${projectId}`);
         const data = await resp.json();
 
-        if (data.status === 'completed') {
-          showOutput(jobId);
+        if (data.status === 'done') {
+          showOutput(projectId);
           finishProduction();
-        } else if (data.status === 'failed') {
+        } else if (data.status === 'error') {
           showError(`Failed: ${data.error}`);
           finishProduction();
         } else {
-          setTimeout(() => pollStatus(jobId), 2000);
+          setTimeout(() => pollProject(projectId), 2000);
         }
-      } catch { setTimeout(() => pollStatus(jobId), 3000); }
+      } catch { setTimeout(() => pollProject(projectId), 3000); }
     }
 
-    function markStageCompleted(stageName) {
-      const cardId = stageMap[stageName];
+    function markAgentDone(name) {
+      const cardId = agentMap[name];
       if (!cardId) return;
       const card = document.getElementById(cardId);
       card.classList.remove('glow', 'opacity-30');
       card.classList.add('completed');
     }
 
-    function markStageSkipped(stageName) {
-      const cardId = stageMap[stageName];
+    function markAgentSkipped(name) {
+      const cardId = agentMap[name];
       if (!cardId) return;
       const card = document.getElementById(cardId);
       card.classList.remove('glow', 'opacity-30');
@@ -930,35 +922,30 @@
       status.className = 'stage-status text-[11px] mt-2 text-amber-400 font-medium';
     }
 
-    function handleEvent(data) {
-      // Update progress
+    function handleAgentEvent(data) {
       const pct = Math.round(data.progress * 100);
       document.getElementById('progress-bar').style.width = `${pct}%`;
       document.getElementById('progress-pct').textContent = `${pct}%`;
       document.getElementById('progress-label').textContent = data.message;
 
-      // Stage transition: when a new stage starts, mark previous as completed
-      const newStage = data.stage;
-      if (newStage && stageMap[newStage] && newStage !== activeStage) {
-        // Mark previous active stage as completed (unless it was skipped)
-        if (activeStage && stageMap[activeStage]) {
-          const prevCard = document.getElementById(stageMap[activeStage]);
-          if (!prevCard.classList.contains('skipped')) {
-            markStageCompleted(activeStage);
+      const newAgent = data.agent;
+      if (newAgent && agentMap[newAgent] && newAgent !== activeAgent) {
+        if (activeAgent && agentMap[activeAgent]) {
+          const prev = document.getElementById(agentMap[activeAgent]);
+          if (!prev.classList.contains('skipped')) {
+            markAgentDone(activeAgent);
           }
         }
-        activeStage = newStage;
+        activeAgent = newAgent;
       }
 
-      // Handle skipped stages (music)
       if (data.data && data.data.skipped) {
-        markStageSkipped(data.stage);
-        addLog(data.stage, data.message);
+        markAgentSkipped(data.agent);
+        addLog(data.agent, data.message);
         return;
       }
 
-      // Highlight active agent
-      const cardId = stageMap[data.stage];
+      const cardId = agentMap[data.agent];
       if (cardId) {
         const card = document.getElementById(cardId);
         if (!card.classList.contains('completed') && !card.classList.contains('skipped')) {
@@ -970,41 +957,38 @@
         }
       }
 
-      // Script preview
-      if (data.stage === 'script' && data.data && data.data.script_preview) {
-        showScriptPreview(data.data.script_preview);
+      if (data.agent === 'writer' && data.data && data.data.plan_preview) {
+        showPlanPreview(data.data.plan_preview);
       }
 
-      // Mark complete stage
-      if (data.stage === 'complete') {
-        // Mark last active stage as completed
-        if (activeStage && stageMap[activeStage]) {
-          markStageCompleted(activeStage);
+      if (data.agent === 'complete') {
+        if (activeAgent && agentMap[activeAgent]) {
+          markAgentDone(activeAgent);
         }
       }
 
-      addLog(data.stage, data.message);
+      addLog(data.agent, data.message);
     }
 
-    function showScriptPreview(shots) {
-      const container = document.getElementById('script-preview');
-      const content = document.getElementById('script-preview-content');
+    function showPlanPreview(segments) {
+      const container = document.getElementById('plan-preview');
+      const content = document.getElementById('plan-preview-content');
       container.classList.remove('hidden');
 
-      content.innerHTML = shots.map(s =>
+      content.innerHTML = segments.map(s =>
         `<div class="flex gap-3 items-start p-2 rounded-lg bg-white/[0.02]">
-          <span class="text-brand-400 font-bold text-xs shrink-0 mt-0.5">Shot ${s.shot}</span>
+          <span class="text-brand-400 font-bold text-xs shrink-0 mt-0.5">#${s.seq}</span>
           <div>
-            <div class="text-xs text-white/60">${s.subtitle}</div>
-            <div class="text-[11px] text-white/30 mt-0.5">${s.narration}...</div>
+            <div class="text-xs text-white/60">${s.caption}</div>
+            <div class="text-[11px] text-white/30 mt-0.5">${s.voiceover}...</div>
           </div>
         </div>`
       ).join('');
     }
 
-    function toggleScriptPreview() {
-      const content = document.getElementById('script-preview-content');
-      const arrow = document.getElementById('script-preview-arrow');
+    function togglePlanPreview() {
+      const content = document.getElementById('plan-preview-content');
+      const arrow = document.getElementById('plan-preview-arrow');
       content.classList.toggle('hidden');
       arrow.style.transform = content.classList.contains('hidden') ? '' : 'rotate(90deg)';
     }
@@ -1020,44 +1004,43 @@
       startProduction();
     }
 
-    function addLog(stage, message) {
+    function addLog(agent, message) {
       const log = document.getElementById('event-log');
-      const stageColors = {
-        director: 'text-purple-400',
-        script: 'text-blue-400',
-        visual: 'text-green-400',
-        voice: 'text-yellow-400',
-        music: 'text-pink-400',
-        editor: 'text-orange-400',
+      const agentColors = {
+        planner: 'text-purple-400',
+        writer: 'text-blue-400',
+        footage: 'text-green-400',
+        narrator: 'text-yellow-400',
+        composer: 'text-pink-400',
+        assembler: 'text-orange-400',
         complete: 'text-emerald-400',
         error: 'text-red-400',
-        done: 'text-white/60',
+        closed: 'text-white/60',
       };
-      const color = stageColors[stage] || 'text-white/40';
+      const color = agentColors[agent] || 'text-white/40';
       const time = new Date().toLocaleTimeString();
 
       log.innerHTML += `<div class="slide-in log-entry flex gap-3">
         <span class="text-white/15 shrink-0 text-xs tabular-nums">${time}</span>
-        <span class="${color} font-medium shrink-0 w-16 text-xs">${stage}</span>
+        <span class="${color} font-medium shrink-0 w-16 text-xs">${agent}</span>
         <span class="text-white/50 text-xs">${message}</span>
       </div>`;
       log.scrollTop = log.scrollHeight;
     }
 
-    function showOutput(jobId) {
+    function showOutput(projectId) {
       const section = document.getElementById('output-section');
       section.classList.remove('hidden');
 
       const video = document.getElementById('output-video');
-      video.src = `${API_BASE}/download/${jobId}`;
+      video.src = `${API_BASE}/projects/${projectId}/file`;
 
       const downloadBtn = document.getElementById('download-btn');
-      downloadBtn.href = `${API_BASE}/download/${jobId}`;
+      downloadBtn.href = `${API_BASE}/projects/${projectId}/file`;
 
-      // Production summary
       document.getElementById('summary-time').textContent = getElapsedFormatted();
-      document.getElementById('summary-shots').textContent = numShotsUsed;
-      const costCNY = (0.1 + numShotsUsed * 3 + 0.2 + 1).toFixed(0);
+      document.getElementById('summary-shots').textContent = segmentCount;
+      const costCNY = (0.1 + segmentCount * 3 + 0.2 + 1).toFixed(0);
       document.getElementById('summary-cost').textContent = `~${costCNY} CNY`;
     }
 
