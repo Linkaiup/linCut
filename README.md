@@ -69,7 +69,8 @@ cd linCut
 
 首次运行会自动从 `.env.example` 创建 `.env`，填入 `MINIMAX_API_KEY` 后再次执行 `./start.sh` 即可。
 
-浏览器打开 **http://localhost:8000**。生成的视频保存在 `data/workspace/` 目录。
+浏览器打开 http://localhost:8000
+生成的视频保存在 `data/workspace/` 目录。
 
 ### 常用命令
 
