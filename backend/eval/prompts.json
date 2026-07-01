@@ -1,0 +1,28 @@
+{
+  "cases": [
+    {
+      "id": "product_intro",
+      "tags": ["quick"],
+      "prompt": "A 12-second cinematic product intro for an AI writing assistant, highlighting speed and quality. Futuristic tech style.",
+      "duration": 12,
+      "segment_count": 2,
+      "with_score": false
+    },
+    {
+      "id": "travel_vlog",
+      "tags": ["quick"],
+      "prompt": "A 12-second travel vlog opening with aerial views of Santorini, Greece. Warm golden-hour cinematic style.",
+      "duration": 12,
+      "segment_count": 2,
+      "with_score": false
+    },
+    {
+      "id": "full_minute",
+      "tags": ["full"],
+      "prompt": "A 60-second brand story for a sustainable coffee company. Warm cinematic journey from farm to cup, calm uplifting tone.",
+      "duration": 60,
+      "segment_count": 10,
+      "with_score": true
+    }
+  ]
+}

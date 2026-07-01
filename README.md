@@ -44,6 +44,41 @@ Footage, Narrator, and Composer run **in parallel** after the Writer finishes. T
 
 All agents inherit from `BaseAgent` (`backend/agents/base.py`) which provides `invoke()` with configurable retries and SSE progress events.
 
+## Quality eval (real API)
+
+End-to-end quality evaluation runs the **full agent pipeline** against MiniMax + ffmpeg (costs API credits and time).
+
+```bash
+pip install -r backend/requirements.txt
+cp .env.example .env   # MINIMAX_API_KEY required
+brew install ffmpeg    # macOS
+
+# Daily regression — 2 × 12s cases (~8–15 min depending on Hailuo queue)
+python -m backend.eval.run_eval
+
+# Include 60s / 10-clip case (expensive)
+python -m backend.eval.run_eval --tag quick --tag full
+
+# Single case + LLM judge on blueprint quality
+python -m backend.eval.run_eval --case product_intro --judge
+
+# Compare against a previous run
+python -m backend.eval.run_eval --compare eval_runs/20250624_120000/report.json
+```
+
+Reports are written to `eval_runs/{run_id}/`:
+
+| File | Content |
+|------|---------|
+| `report.json` | Summary scores, pass/fail, all checks |
+| `{case_id}/trace.json` | Planner/Writer/Media artifact paths |
+| `{case_id}/events.json` | Agent SSE-style event log |
+| `{case_id}/metrics.json` | Per-case checks |
+
+**Metrics (rule-based):** segment counts, blueprint/plan field completeness, clip & voice file presence, SRT entry count, deliverable duration vs Hailuo 6s cap, ffprobe video+audio streams, retry/complete events. Optional `--judge` adds an LLM 1–5 relevance score on the blueprint.
+
+Edit cases in `backend/eval/prompts.json` (`quick` tag = 12s/2 clips, `full` = 60s/10 clips).
+
 ## Quick start
 
 ```bash
@@ -105,8 +140,10 @@ docker compose up --build -d
 backend/
   agents/       base + planner, writer, footage, narrator, composer, assembler
   core/         settings, llm helper
+  eval/         real-API quality eval (prompts.json, metrics, run_eval)
   studio.py     agent orchestrator
   api/app.py    FastAPI routes
+eval_runs/      eval reports (gitignored)
 frontend/
   index.html
 ```

@@ -7,6 +7,7 @@ output/
 backend/output/
 data/
 backend/workspace/
+eval_runs/
 *.egg-info/
 dist/
 build/
